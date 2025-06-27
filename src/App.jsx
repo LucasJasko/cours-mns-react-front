@@ -1,22 +1,23 @@
-import { useEffect, useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
+import UserList from "./UserList";
 import Button from "./Button";
+import SpecialButton from "./SpecialButton";
+import { useState } from "react";
 
 function App() {
   const [count, setCount] = useState(0);
+  const [users, setUsers] = useState(["John Doe", "Jack Jones", "Michel Prépu"]);
+  const [nbUsers, setNbUsers] = useState(users.length);
 
-  const [isDown, setIsDown] = useState(false);
+  function deleteUser() {
+    setUsers([]);
+  }
 
-  useEffect(() => {
-    setInterval(() => {
-      if (isDown) {
-        setCount((count) => count + 1);
-      }
-    }, 10);
-  }, [isDown]);
-
+  function addUser(user) {
+    setUsers((prev) => [...prev, user]);
+  }
   return (
     <>
       <div>
@@ -28,15 +29,9 @@ function App() {
         </a>
       </div>
       <h1>Vite + React</h1>
-      <div className="card">
-        <Button />
-        <br />
-        <button onClick={() => setIsDown(!isDown)}>count is {count}</button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">Click on the Vite and React logos to learn more</p>
+      <Button />
+      <UserList users={users} setUsers={setUsers} nbUsers={nbUsers} setNbUsers={setNbUsers} />
+      <SpecialButton count={count} setCount={setCount} />
     </>
   );
 }
