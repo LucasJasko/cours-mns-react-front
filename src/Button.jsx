@@ -1,5 +1,5 @@
-const Button = () => {
-  return <button>Ceci est un lonnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnng boutton</button>;
+const Button = ({ addUsers }) => {
+  return <button onClick={addUsers}>Ceci est un lonnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnng boutton</button>;
 };
 
 export default Button;
