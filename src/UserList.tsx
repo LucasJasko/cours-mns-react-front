@@ -6,7 +6,7 @@ export default function UserList({ users, setUsers, nbUsers, setNbUsers, phoneNu
       <h2>User List: {nbUsers}</h2>
       <ul>
         {users.map((user, index) => (
-          <li key={index}>
+          <li className="user-item" key={index}>
             <User id={index} user={user} users={users} setUsers={setUsers} nbUsers={nbUsers} setNbUsers={setNbUsers} phoneNumber={phoneNumber} />
           </li>
         ))}

@@ -6,7 +6,7 @@ export default function User({ id, user, users, setUsers, nbUsers, setNbUsers, p
 
   return (
     <>
-      {user}
+      {id}. {user}
       <br />
       {phoneNumber}
       <br />

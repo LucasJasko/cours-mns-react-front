@@ -16,6 +16,7 @@ function App() {
   function addUser(user) {
     setUsers((prev) => [...prev, user]);
   }
+
   return (
     <>
       <div>
