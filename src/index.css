@@ -72,3 +72,25 @@ button:focus-visible {
   display: flex;
   justify-content: space-between;
 }
+
+.btn-container {
+  width: 500px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.form {
+  width: 500px;
+  text-align: left;
+}
+
+.form label input {
+  padding: 5px 10px;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.form input[type="submit"] {
+  padding: 5px 10px;
+  cursor: pointer;
+}
