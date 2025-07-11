@@ -7,9 +7,7 @@ export default function UserList({ users, setUsers }) {
       {users.length === 0 && <p>No users found</p>}
       <ul>
         {users.map((item, index) => (
-          <li key={index}>
-            <User id={index} user={item.name} users={users} setUsers={setUsers} phoneNumber={item.phoneNumber} country={item.country} />
-          </li>
+          <User key={index} id={index} user={item.name} users={users} setUsers={setUsers} tel={item.tel} country={item.country} />
         ))}
       </ul>
     </div>

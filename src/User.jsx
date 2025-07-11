@@ -1,9 +1,9 @@
 import { useState } from "react";
 
-export default function User({ id, user, users, setUsers, phoneNumber, country }) {
+export default function User({ id, user, users, setUsers, tel, country }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedtName, setEditedName] = useState(user);
-  const [editedPhone, setEditedPhone] = useState(phoneNumber || "");
+  const [editedPhone, setEditedPhone] = useState(tel || "");
   const [editedCountry, setEditedCountry] = useState(country || "");
 
   function deleteUser(id) {
@@ -15,7 +15,7 @@ export default function User({ id, user, users, setUsers, phoneNumber, country }
   function handleEditToggle() {
     if (isEditing) {
       setEditedName(user);
-      setEditedPhone(phoneNumber || "");
+      setEditedPhone(tel || "");
     }
     setIsEditing(!isEditing);
   }
@@ -25,7 +25,7 @@ export default function User({ id, user, users, setUsers, phoneNumber, country }
       if (i == id) {
         return {
           name: editedtName.trim(),
-          phoneNumber: editedPhone.trim(),
+          tel: editedPhone.trim(),
           country: editedCountry.trim(),
         };
       }
@@ -38,11 +38,12 @@ export default function User({ id, user, users, setUsers, phoneNumber, country }
   }
 
   return (
-    <div className="user-item">
+    <li className="user-item">
       {isEditing ? (
         <div className="user-edit-form">
           <input type="text" value={editedtName} onChange={(e) => setEditedName(e.target.value)} placeholder="Nom" autoFocus />
           <input type="tel" value={editedPhone} onChange={(e) => setEditedPhone(e.target.value)} placeholder="Telephone" autoFocus />
+          <input type="text" value={editedCountry} onChange={(e) => setEditedCountry(e.target.value)} placeholder="Pays" autoFocus />
           <div className="edit-button">
             <button onClick={handleSave} className="save-btn">
               Sauvegarder
@@ -54,19 +55,21 @@ export default function User({ id, user, users, setUsers, phoneNumber, country }
         </div>
       ) : (
         <div className="user-display">
-          <span className="user-display">{user}</span>
-          <br />
-          <span className="user-display">{country}</span>
-          <br />
-          {phoneNumber && <span className="user-phone"> - Phone: {phoneNumber}</span>}
-          <button onClick={handleEditToggle} className="edit-btn">
-            Editer
-          </button>
-          <button onClick={() => deleteUser(id)} className="delete-btn">
-            Supprimer
-          </button>
+          <div className="infos">
+            {user && <p>Utilisateur: {user}</p>}
+            {country && <p>Pays: {country}</p>}
+            {tel && <p>Tel: {tel}</p>}
+          </div>
+          <div className="actions">
+            <button onClick={handleEditToggle} className="edit-btn">
+              Editer
+            </button>
+            <button onClick={() => deleteUser(id)} className="delete-btn">
+              Supprimer
+            </button>
+          </div>
         </div>
       )}
-    </div>
+    </li>
   );
 }

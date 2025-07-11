@@ -1,82 +1,50 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useCountrySearch } from "./UseCountrySearch";
+import { CountryAutoComplete } from "./CountryAutocomplete";
 
 export default function Form({ setUsers, users }) {
-  const [name, setName] = useState("");
-  const [tel, setTel] = useState("");
-  const [country, setCountry] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
-  const [countries, setCountries] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [formData, setFormData] = useState({
+    name: "",
+    country: "",
+    tel: "",
+  });
+
+  const { searchTerm, setSearchTerm, countries, loading, error, setError } = useCountrySearch();
+
+  // Le useRef peut servir dans deux cas, lorsqu'on veut identifier un élément dans le DOM même si il n'existe plus, c'est une sorte de sauvegarde
 
   function handleSubmit(e) {
     e.preventDefault();
-    const updatedUsers = [...users, { name, tel, country }];
+
+    if (!formData.name.trim()) return setError("name");
+    if (!formData.tel.trim()) return setError("tel");
+    if (!formData.country.trim()) return setError("country");
+
+    const updatedUsers = [...users, formData];
     setUsers(updatedUsers);
-    setName("");
-    setTel("");
+    setSearchTerm("");
+    setFormData({
+      name: "",
+      country: "",
+      tel: "",
+    });
+    setCountries([]);
     localStorage.setItem("users", JSON.stringify(updatedUsers));
   }
 
-  function handleName(e) {
-    const name = e.target.value;
-    setName(name);
-  }
-
-  function handleCountry(searchValue) {
-    setSearchTerm(searchValue);
-    const country = e.target.value;
-    setCountry(country);
-  }
-
-  function handlePhoneNumber(e) {
-    const phoneNumber = e.target.value;
-    setTel(phoneNumber);
-  }
-
-  const fetchCountries = async (searchTerm) => {
-    if (searchTerm === "") return setCountries([]);
-    setLoading(true);
-    setError(null);
-
-    try {
-      const res = await fetch(`https://restcountries.com/v3.1/name/${searchTerm}?fields=name,cca3`);
-      console.log(res);
-      if (!res.ok) {
-        throw new Error("Erreur lors de la récupération des données");
-      }
-      const data = await res.json();
-      setCountries(data);
-    } catch (err) {
-      console.log(err);
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchCountries();
-  }, []);
-
   return (
-    <form onSubmit={handleSubmit} className="form">
+    <form onSubmit={handleSubmit} className="form" noValidate>
       <label>
         Nom <br />
-        <input type="text" onChange={(e) => handleName(e)} placeholder="Entrez le nom" required />
+        <input type="text" onChange={(e) => setFormData([...prev, { name: e.target.value }])} placeholder="Entrez le nom" />
       </label>
+      {error && error == "name" && <div className="error">Le nom n'est pas défini</div>}
       <label>
         Téléphone <br />
-        <input type="text" onChange={(e) => handlePhoneNumber(e)} placeholder="Entrez le numéro de téléphone" required />
+        <input type="text" onChange={(e) => setFormData([...prev, { tel: e.target.value }])} placeholder="Entrez le numéro de téléphone" />
       </label>
-      <select onChange={(e) => handleCountry(e)}>
-        <option value="default">-- Choissiez un pays --</option>
-        {countries.map((country, i) => (
-          <option key={i} value={country.name.common}>
-            {country.name.common}
-          </option>
-        ))}
-      </select>
+      {error && error == "tel" && <div className="error">Le téléphone n'est pas défini</div>}
+      <CountryAutoComplete value={formData.country} onChange={(e) => setFormData([...preview, { country: e }])} />
       <button type="submit">envoyer</button>
     </form>
   );
